@@ -6,6 +6,7 @@ import Error from './components/Error'
 import Startscreen from './components/Startscreen'
 import Questions from './components/Questions'
 import Nextbutton from './components/Nextbutton'
+import Progress from './components/Progress'
 
 const initialState = {
   questions: [],
@@ -35,7 +36,9 @@ function reducer(state, action) {
 }
 
 function App() {
-  const [{ questions, status, index, answer }, dispatch] = useReducer(reducer, initialState)
+  const [{ questions, status, index, answer, points }, dispatch] = useReducer(reducer, initialState)
+
+  const numQuestion = questions.length
 
   useEffect(() => {
     fetch('http://localhost:5000/results')
@@ -48,6 +51,7 @@ function App() {
     <>
       <div className='w-full h-[100vh] flex flex-col bg- bg-yellow-300'>
         <Header />
+        <Progress index={index} points={points} numQuestion={numQuestion} />
         <Main>
           {status === 'loading' && <Loader />}
           {status === 'error' && <Error />}
