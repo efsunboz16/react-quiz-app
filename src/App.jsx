@@ -7,6 +7,7 @@ import Startscreen from './components/Startscreen'
 import Questions from './components/Questions'
 import Nextbutton from './components/Nextbutton'
 import Progress from './components/Progress'
+import Finishscreen from './components/Finishscreen'
 
 const initialState = {
   questions: [],
@@ -30,6 +31,8 @@ function reducer(state, action) {
       return { ...state, answer: action.payload, points: action.payload === question.correct_answer ? state.points + 10 : state.points }
     case 'nextQuestion':
       return { ...state, index: state.index + 1, answer: null }
+    case 'finish':
+      return { ...state, status: 'finished' }
     default:
       throw new Error('Action unknown')
   }
@@ -51,14 +54,14 @@ function App() {
     <>
       <div className='w-full h-[100vh] flex flex-col bg- bg-yellow-300'>
         <Header />
-        <Progress index={index} points={points} numQuestion={numQuestion} />
         <Main>
           {status === 'loading' && <Loader />}
           {status === 'error' && <Error />}
           {status === 'ready' && <Startscreen dispatch={dispatch} />}
-          {status === 'active' && <Questions question={questions[index]} dispatch={dispatch} answer={answer} />}
+          {status === 'active' && (<><Progress index={index} points={points} numQuestion={numQuestion} answer={answer} /><Questions question={questions[index]} dispatch={dispatch} answer={answer} /><Nextbutton dispatch={dispatch} answer={answer} numQuestion={numQuestion} index={index}  /></>)}
+          {status === 'finished' && <Finishscreen points={points} />}
         </Main>
-        <Nextbutton dispatch={dispatch} answer={answer} />
+
       </div>
     </>
   )
