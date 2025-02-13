@@ -8,6 +8,7 @@ import Questions from './components/Questions'
 import Nextbutton from './components/Nextbutton'
 import Progress from './components/Progress'
 import Finishscreen from './components/Finishscreen'
+import Timer from './components/Timer'
 
 const initialState = {
   questions: [],
@@ -16,6 +17,7 @@ const initialState = {
   index: 0,
   answer: null,
   points: 0,
+  secondRemaining: 200
 }
 
 function reducer(state, action) {
@@ -35,13 +37,15 @@ function reducer(state, action) {
       return { ...state, status: 'finished' }
     case 'restart':
       return { ...initialState, status: 'ready', questions: state.questions }
+    case'tick':
+      return {...state, secondRemaining: state.secondRemaining - 1, status: state.secondRemaining === 0 ? 'finished' : state.status}
     default:
       throw new Error('Action unknown')
   }
 }
 
 function App() {
-  const [{ questions, status, index, answer, points }, dispatch] = useReducer(reducer, initialState)
+  const [{ questions, status, index, answer, points, secondRemaining }, dispatch] = useReducer(reducer, initialState)
 
   const numQuestion = questions.length
 
@@ -60,7 +64,7 @@ function App() {
           {status === 'loading' && <Loader />}
           {status === 'error' && <Error />}
           {status === 'ready' && <Startscreen dispatch={dispatch} />}
-          {status === 'active' && (<><Progress index={index} points={points} numQuestion={numQuestion} answer={answer} /><Questions question={questions[index]} dispatch={dispatch} answer={answer} /><Nextbutton dispatch={dispatch} answer={answer} numQuestion={numQuestion} index={index}  /></>)}
+          {status === 'active' && (<><Progress index={index} points={points} numQuestion={numQuestion} answer={answer} /><Questions question={questions[index]} dispatch={dispatch} answer={answer} /><Timer dispatch={dispatch} secondRemaining={secondRemaining} />  <Nextbutton dispatch={dispatch} answer={answer} numQuestion={numQuestion} index={index}  /></>)}
           {status === 'finished' && <Finishscreen points={points} dispatch={dispatch} />}
         </Main>
 

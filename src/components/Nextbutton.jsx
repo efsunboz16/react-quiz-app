@@ -6,7 +6,7 @@ const Nextbutton = ({ dispatch, answer, numQuestion, index }) => {
 
     if (index < numQuestion - 1) {
         return (
-            <div className='flex flex-row justify-end pr-[10%] pt-4'>
+            <div className='flex flex-row justify-end pr-[10%]'>
                 <button className='bg-blue-500 text-white p-2 rounded-md cursor-pointer' onClick={() => dispatch({ type: 'nextQuestion' })}>Next</button>
             </div>
         )
@@ -14,7 +14,7 @@ const Nextbutton = ({ dispatch, answer, numQuestion, index }) => {
 
     if (index === numQuestion - 1) {
         return (
-            <div className='flex flex-row justify-end pr-[10%] pt-4'>
+            <div className='flex flex-row justify-end pr-[10%]'>
                 <button className='bg-blue-500 text-white p-2 rounded-md cursor-pointer' onClick={() => dispatch({ type: 'finish' })}>Finish</button>
             </div>
         )
